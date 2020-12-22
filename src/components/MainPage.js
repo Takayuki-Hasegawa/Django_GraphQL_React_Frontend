@@ -1,11 +1,58 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import styles from "./MainPage.module.css";
+import { useQuery } from "@apollo/react-hooks";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { GET_DEPTS, GET_EMPLOYEES } from "../queries";
+import { Grid } from "@material-ui/core";
+import jwtDecode from "jwt-decode";
 
-function MainPage() {
+const MainPage = () => {
+  const {
+    loading: loadingDepts,
+    data: dataDepts,
+    error: errorDepts,
+  } = useQuery(GET_DEPTS);
+
+  const {
+    loading: loadingEmployees,
+    data: dataEmployees,
+    error: errorEmployees,
+  } = useQuery(GET_EMPLOYEES);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      const decodedToken = jwtDecode(localStorage.getItem("token"));
+      if (decodedToken.exp * 1000 < Date.now()) {
+        localStorage.removeItem("token");
+      }
+    } else {
+      window.location.href = "/";
+    }
+  }, [errorEmployees, errorDepts]);
+
+  if (loadingEmployees || loadingDepts) return <h1>Loading from server</h1>;
+  else if (errorEmployees || errorDepts)
     return (
-        <div>
-            
-        </div>
-    )
-}
+      <>
+        <h1>Employee data fetch error : {errorEmployees.message}</h1>
+        <h1>Department data fetch error : {errorDepts.message}</h1>
+      </>
+    );
 
-export default MainPage
+  return (
+    <div className={styles.MainPage}>
+      <h1>
+        Check Employees
+        <ExitToAppIcon
+          className={styles.mainPage__out}
+          onClick={() => {
+            localStorage.removeItem("token");
+            window.location.href = "/";
+          }}
+        />
+      </h1>
+    </div>
+  );
+};
+
+export default MainPage;
