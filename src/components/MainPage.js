@@ -5,6 +5,8 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { GET_DEPTS, GET_EMPLOYEES } from "../queries";
 import { Grid } from "@material-ui/core";
 import jwtDecode from "jwt-decode";
+import EmployeeList from "./EmployeeList";
+import EmployeeCreate from "./EmployeeCreate";
 
 const MainPage = () => {
   const {
@@ -51,6 +53,15 @@ const MainPage = () => {
           }}
         />
       </h1>
+
+      <EmployeeCreate dataDepts={dataDepts} />
+      <Grid container>
+        <Grid item xs={5}>
+          <EmployeeList dataEmployees={dataEmployees} />
+        </Grid>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={3}></Grid>
+      </Grid>
     </div>
   );
 };
