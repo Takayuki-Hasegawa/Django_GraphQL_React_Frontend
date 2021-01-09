@@ -8,7 +8,7 @@ import MainPage from "./components/MainPage";
 import StateContextProvider from "./context/StateContext";
 
 const client = new ApolloClient({
-  uri: "http://127.0.0.1:8000/graphql/",
+  uri: "http://127.0.0.1:8000/gql/",
   headers: {
     authorization: localStorage.getItem("token")
       ? `JWT ${localStorage.getItem("token")}`
